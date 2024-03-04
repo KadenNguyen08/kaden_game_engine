@@ -6,7 +6,19 @@ import sys
 from random import randint
 from os import path
 
+from math import floor
+
+class Cooldown():
+    #
+    def __init__(self):
+        self.current_time = 0
+        self.event_time = 0
+        self.delta = 0
+        #ticking makes sure that the timer is counting
+    #tiking is required to be used to cunt down or up
 # Game class is created
+def ticking(self):
+    self.current_time = floor((pg.time.get_ticks())/1000)
 class Game:
     # Methods are created
     def __init__(self):
