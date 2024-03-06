@@ -1,4 +1,13 @@
 # This file was created by: Kaden Nguyen
+
+'''
+health bar
+enemy variations
+weapons and armor
+'''
+
+
+
 import pygame as pg
 from settings import *
 from sprites import *
