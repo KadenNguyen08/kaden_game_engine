@@ -4,7 +4,7 @@
 import pygame as pg
 from pygame.sprite import Group
 from settings import *
-
+from random import choice
 # Player class created here
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -20,6 +20,8 @@ class Player(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.speed = 300
         self.moneybag = 0
+        self.status = ""
+        self.hitpoints = 100
 
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -30,6 +32,7 @@ class Player(pg.sprite.Sprite):
             print(self.rect.y)
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = self.speed
+            self.game.test_timer.event_reset()
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vy = -self.speed
         if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -70,7 +73,18 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
             if str(hits[0].__class__.__name__) == "PowerUp":
-                self.speed += 200
+                print(hits[0].__class__.__name__)
+                effect = choice(POWER_UP_EFFECTS)
+                print(effect)
+                if effect == "Invincible":
+                    self.status = "Invincible"
+            if str(hits[0].__class__.__name__) == "Mob":
+                # print(hits[0].__class__.__name__)
+                # print("Collided with mob")
+                # self.hitpoints -= 1
+                if self.status == "Invincible":
+                    print("you can't hurt me")
+
     # Update
     def update(self):
         # self.rect.x = self.x
@@ -84,6 +98,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
+        self.collide_with_group(self.game.mobs, False)
         # self.rect.x = self.x * TILESIZE
         # self.rect.y = self.y * TILESIZE
 

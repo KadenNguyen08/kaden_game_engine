@@ -18,11 +18,26 @@ from os import path
 from math import floor
 
 class Cooldown():
-    #
+    # sets all properties to zero when instantiated...
     def __init__(self):
         self.current_time = 0
         self.event_time = 0
         self.delta = 0
+        # ticking ensures the timer is counting...
+    # must use ticking to count up or down
+    def ticking(self):
+        self.current_time = floor((pg.time.get_ticks())/1000)
+        self.delta = self.current_time - self.event_time
+    # resets event time to zero - cooldown reset
+    def countdown(self, x):
+        x = x - self.delta
+        if x != None:
+            return x
+    def event_reset(self):
+        self.event_time = floor((pg.time.get_ticks())/1000)
+    # sets current time
+    def timer(self):
+        self.current_time = floor((pg.time.get_ticks())/1000)
         #ticking makes sure that the timer is counting
     #tiking is required to be used to cunt down or up
 # Game class is created
@@ -58,10 +73,13 @@ class Game:
                 self.map_data.append(line)
                 print(self.map_data)
     def new(self):
+        self.test_timer = Cooldown()
+        print("create new game...")
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
         # self.player = Player(self, 10, 10)
         # self.all_sprites.add(self.player)
         # for x in range(10, 20):
@@ -79,8 +97,8 @@ class Game:
                     Coin(self, col, row)
                 if tile == 'U':
                     PowerUp(self, col, row)
-                if tile == 'E':
-                    Enemy(self, col, row)
+                if tile == 'M':
+                    Mob(self, col, row)
     def run(self):
         self.playing = True
         while self.playing:
